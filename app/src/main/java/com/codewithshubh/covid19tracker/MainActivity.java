@@ -8,6 +8,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.codewithshubh.covid19tracker.Models.StateWiseModel;
 
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             str_death, str_death_new, str_tests, str_tests_new, str_last_update_time;
     private int int_active_new;
     private ProgressDialog progressDialog;
-    private boolean doubleBackToExitPressedOnce;
+    private boolean doubleBackToExitPressedOnce = false;
     private Toast backPressToast;
 
     @Override
@@ -86,7 +88,8 @@ public class MainActivity extends AppCompatActivity {
         lin_state_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "State data", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "State data", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, StateWiseDataActivity.class));
             }
         });
 
@@ -94,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(MainActivity.this, "World data", Toast.LENGTH_SHORT).show();
+                //Intent intent = new Intent(MainActivity.this, WorldDataActivity.class);
+                //startActivity(intent);
                 startActivity(new Intent(MainActivity.this, WorldDataActivity.class));
             }
         });
@@ -102,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     private void FetchData() {
 
         //show progress dialog
-        ShowDialog();
+        ShowDialog(this);
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String apiUrl = "https://api.covid19india.org/data.json";
@@ -199,16 +204,16 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void ShowDialog() {
+    public void ShowDialog(Context context) {
         //setting up progress dialog
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(context);
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
     }
 
-    private void DismissDialog() {
+    public void DismissDialog() {
         progressDialog.dismiss();
     }
 
@@ -254,7 +259,21 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.activity_main_swipe_refresh_layout);
         lin_state_data = findViewById(R.id.activity_main_statewise_lin);
         lin_world_data = findViewById(R.id.activity_main_world_data_lin);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.menu_about){
+            Toast.makeText(MainActivity.this, "About menu icon clicked", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -274,20 +293,5 @@ public class MainActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.menu_about){
-            Toast.makeText(MainActivity.this, "About menu icon clicked", Toast.LENGTH_SHORT).show();
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -5,14 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +40,7 @@ public class WorldDataActivity extends AppCompatActivity {
 
     LinearLayout lin_countrywise;
 
-    ProgressDialog progressDialog;
+    MainActivity activity = new MainActivity();
 
     PieChart pieChart;
     private int int_active_new = 0;
@@ -54,10 +52,10 @@ public class WorldDataActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //setting up the titlebar title
+
+        //setting up the titlebar text
         getSupportActionBar().setTitle("Covid-19 Tracker (World)");
 
-        
         //Initialise UI
         Init();
 
@@ -79,31 +77,19 @@ public class WorldDataActivity extends AppCompatActivity {
                 Toast.makeText(WorldDataActivity.this, "Country wise data", Toast.LENGTH_SHORT).show();
             }
         });
-    }
 
-    private void ShowDialog() {
-        //setting up progress dialog
-        progressDialog = new ProgressDialog(this);
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.progress_dialog);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-    }
 
-    private void DismissDialog() {
-        progressDialog.dismiss();
+
     }
 
     private void FetchWorldData() {
 
         //show dialog
-        ShowDialog();
+        activity.ShowDialog(this);
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         String apiUrl = "https://corona.lmao.ninja/v2/all";
-
         pieChart.clearChart();
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 apiUrl,
@@ -111,9 +97,8 @@ public class WorldDataActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
+                        //Fetching data from API and storing into string
                         try {
-                            //Fetching data from API and storing into string
                             str_confirmed = response.getString("cases");
                             str_confirmed_new = response.getString("todayCases");
                             str_active = response.getString("active");
@@ -129,19 +114,19 @@ public class WorldDataActivity extends AppCompatActivity {
                                 public void run() {
                                     // setting up texted in the text view
                                     tv_confirmed.setText(NumberFormat.getInstance().format(Integer.parseInt(str_confirmed)));
-                                    tv_confirmed_new.setText(NumberFormat.getInstance().format(Integer.parseInt(str_confirmed_new)));
+                                    tv_confirmed_new.setText("+"+NumberFormat.getInstance().format(Integer.parseInt(str_confirmed_new)));
 
-                                    tv_active.setText(NumberFormat.getInstance().format(Integer.parseInt(str_confirmed_new)));
+                                    tv_active.setText(NumberFormat.getInstance().format(Integer.parseInt(str_active)));
 
                                     int_active_new = Integer.parseInt(str_confirmed_new)
                                             - (Integer.parseInt(str_recovered_new) + Integer.parseInt(str_death_new));
                                     tv_active_new.setText("+"+NumberFormat.getInstance().format(int_active_new));
 
                                     tv_recovered.setText(NumberFormat.getInstance().format(Integer.parseInt(str_recovered)));
-                                    tv_recovered_new.setText(NumberFormat.getInstance().format(Integer.parseInt(str_recovered_new)));
+                                    tv_recovered_new.setText("+"+NumberFormat.getInstance().format(Integer.parseInt(str_recovered_new)));
 
                                     tv_death.setText(NumberFormat.getInstance().format(Integer.parseInt(str_death)));
-                                    tv_death_new.setText(NumberFormat.getInstance().format(Integer.parseInt(str_death_new)));
+                                    tv_death_new.setText("+"+NumberFormat.getInstance().format(Integer.parseInt(str_death_new)));
 
                                     tv_tests.setText(NumberFormat.getInstance().format(Integer.parseInt(str_tests)));
 
@@ -150,20 +135,21 @@ public class WorldDataActivity extends AppCompatActivity {
                                     pieChart.addPieSlice(new PieModel("Deceased", Integer.parseInt(str_death), Color.parseColor("#F6404F")));
 
                                     pieChart.startAnimation();
-                                    DismissDialog();
+
+                                    activity.DismissDialog();
+
                                 }
                             },1000);
-
-                        } catch (JSONException e) {
+                        }
+                        catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
+
                     }
                 });
         requestQueue.add(jsonObjectRequest);
@@ -181,14 +167,13 @@ public class WorldDataActivity extends AppCompatActivity {
         tv_tests = findViewById(R.id.activity_world_data_tests_textView);
         swipeRefreshLayout = findViewById(R.id.activity_world_data_swipe_refresh_layout);
         pieChart = findViewById(R.id.activity_world_data_piechart);
-
         lin_countrywise = findViewById(R.id.activity_world_data_countrywise_lin);
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home)
             finish();
         return super.onOptionsItemSelected(item);
     }
+
 }
