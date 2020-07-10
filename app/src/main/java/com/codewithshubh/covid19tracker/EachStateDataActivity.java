@@ -3,7 +3,6 @@ package com.codewithshubh.covid19tracker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -30,7 +29,6 @@ import static com.codewithshubh.covid19tracker.Constants.STATE_RECOVERED;
 import static com.codewithshubh.covid19tracker.Constants.STATE_RECOVERED_NEW;
 
 public class EachStateDataActivity extends AppCompatActivity {
-
     private TextView tv_confirmed, tv_confirmed_new, tv_active, tv_active_new, tv_death, tv_death_new,
             tv_recovered, tv_recovered_new, tv_lastupdatedate, tv_dist;
 
@@ -39,16 +37,16 @@ public class EachStateDataActivity extends AppCompatActivity {
 
     private PieChart pieChart;
 
-    private ProgressDialog progressDialog;
-
     private LinearLayout lin_district;
 
     private MainActivity activity = new MainActivity();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_each_state_data);
+
         //Fetching data which is passed from previous activity into this activity
         GetIntent();
 
@@ -75,7 +73,6 @@ public class EachStateDataActivity extends AppCompatActivity {
     private void LoadStateData() {
         //Show dialog
         activity.ShowDialog(this);
-
         Handler postDelayToshowProgress = new Handler();
         postDelayToshowProgress.postDelayed(new Runnable() {
             @Override
@@ -118,6 +115,7 @@ public class EachStateDataActivity extends AppCompatActivity {
             finish();
         return super.onOptionsItemSelected(item);
     }
+
 
     private void Init() {
         tv_confirmed = findViewById(R.id.activity_each_state_confirmed_textView);

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.codewithshubh.covid19tracker.EachStateDataActivity;
 import com.codewithshubh.covid19tracker.Models.StateWiseModel;
 import com.codewithshubh.covid19tracker.R;
-import com.codewithshubh.covid19tracker.StateWiseDataActivity;
 
 import java.util.ArrayList;
 
@@ -28,7 +27,7 @@ import static com.codewithshubh.covid19tracker.Constants.STATE_NAME;
 import static com.codewithshubh.covid19tracker.Constants.STATE_RECOVERED;
 import static com.codewithshubh.covid19tracker.Constants.STATE_RECOVERED_NEW;
 
-public class StateWiseAdapter extends RecyclerView.Adapter<StateWiseAdapter.ViewHolder>{
+public class StateWiseAdapter extends RecyclerView.Adapter<StateWiseAdapter.ViewHolder> {
 
     private Context mContext;
     private ArrayList<StateWiseModel> arrayList;
@@ -49,34 +48,29 @@ public class StateWiseAdapter extends RecyclerView.Adapter<StateWiseAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         StateWiseModel currentItem = arrayList.get(position);
         String stateName = currentItem.getState();
+
         String stateTotal = currentItem.getConfirmed();
         holder.stateTotalCases.setText(stateTotal);
         holder.stateName.setText(stateName);
 
-        holder.lin_state_wise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StateWiseModel clickedItem = arrayList.get(position);
-                Intent perStateIntent = new Intent(mContext, EachStateDataActivity.class);
+         holder.lin_state_wise.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 StateWiseModel clickedItem = arrayList.get(position);
+                 Intent perStateIntent = new Intent(mContext, EachStateDataActivity.class);
+                 perStateIntent.putExtra(STATE_NAME, clickedItem.getState());
+                 perStateIntent.putExtra(STATE_CONFIRMED, clickedItem.getConfirmed());
+                 perStateIntent.putExtra(STATE_CONFIRMED_NEW, clickedItem.getConfirmed_new());
+                 perStateIntent.putExtra(STATE_ACTIVE, clickedItem.getActive());
+                 perStateIntent.putExtra(STATE_DEATH, clickedItem.getDeath());
+                 perStateIntent.putExtra(STATE_DEATH_NEW, clickedItem.getDeath_new());
+                 perStateIntent.putExtra(STATE_RECOVERED, clickedItem.getRecovered());
+                 perStateIntent.putExtra(STATE_RECOVERED_NEW, clickedItem.getRecovered_new());
+                 perStateIntent.putExtra(STATE_LAST_UPDATE, clickedItem.getLastupdate());
 
-                perStateIntent.putExtra(STATE_NAME, clickedItem.getState());
-                perStateIntent.putExtra(STATE_CONFIRMED, clickedItem.getConfirmed());
-                perStateIntent.putExtra(STATE_CONFIRMED_NEW, clickedItem.getConfirmed_new());
-                perStateIntent.putExtra(STATE_ACTIVE, clickedItem.getActive());
-                perStateIntent.putExtra(STATE_DEATH, clickedItem.getDeath());
-                perStateIntent.putExtra(STATE_DEATH_NEW, clickedItem.getDeath_new());
-                perStateIntent.putExtra(STATE_RECOVERED, clickedItem.getRecovered());
-                perStateIntent.putExtra(STATE_RECOVERED_NEW, clickedItem.getRecovered_new());
-                perStateIntent.putExtra(STATE_LAST_UPDATE, clickedItem.getLastupdate());
-
-                mContext.startActivity(perStateIntent);
-            }
-        });
-    }
-
-    @Override
-    public int getItemCount() {
-        return arrayList.isEmpty() ? 0 : arrayList.size();
+                 mContext.startActivity(perStateIntent);
+             }
+         });
     }
 
     public void filterList(ArrayList<StateWiseModel> filteredList) {
@@ -84,7 +78,13 @@ public class StateWiseAdapter extends RecyclerView.Adapter<StateWiseAdapter.View
         notifyDataSetChanged();
     }
 
+    @Override
+    public int getItemCount() {
+        return arrayList==null ? 0 : arrayList.size();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         TextView stateName, stateTotalCases;
         LinearLayout lin_state_wise;
         public ViewHolder(@NonNull View itemView) {

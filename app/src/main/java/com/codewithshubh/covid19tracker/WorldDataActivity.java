@@ -40,10 +40,12 @@ public class WorldDataActivity extends AppCompatActivity {
 
     LinearLayout lin_countrywise;
 
-    MainActivity activity = new MainActivity();
+    ProgressDialog progressDialog;
 
     PieChart pieChart;
     private int int_active_new = 0;
+
+    private MainActivity activity = new MainActivity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,5 +177,7 @@ public class WorldDataActivity extends AppCompatActivity {
             finish();
         return super.onOptionsItemSelected(item);
     }
+
+
 
 }

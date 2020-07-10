@@ -1,17 +1,14 @@
 package com.codewithshubh.covid19tracker;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.android.volley.Request;
@@ -27,7 +24,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class StateWiseDataActivity extends AppCompatActivity {
@@ -35,14 +31,11 @@ public class StateWiseDataActivity extends AppCompatActivity {
     private RecyclerView rv_state_wise;
     private StateWiseAdapter stateWiseAdapter;
     private ArrayList<StateWiseModel> stateWiseModelArrayList;
-
-    private ProgressDialog progressDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
-    public EditText et_search;
+    private EditText et_search;
 
     private String str_state, str_confirmed, str_confirmed_new, str_active, str_active_new, str_recovered, str_recovered_new,
-                    str_death, str_death_new, str_lastupdatedate;
-
+            str_death, str_death_new, str_lastupdatedate;
 
     private MainActivity activity = new MainActivity();
 
@@ -101,7 +94,6 @@ public class StateWiseDataActivity extends AppCompatActivity {
     }
 
     private void FetchStateWiseData() {
-
         //Show progress dialog
         activity.ShowDialog(this);
 
@@ -179,12 +171,5 @@ public class StateWiseDataActivity extends AppCompatActivity {
         stateWiseModelArrayList = new ArrayList<>();
         stateWiseAdapter = new StateWiseAdapter(StateWiseDataActivity.this, stateWiseModelArrayList);
         rv_state_wise.setAdapter(stateWiseAdapter);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home)
-            finish();
-        return super.onOptionsItemSelected(item);
     }
 }
