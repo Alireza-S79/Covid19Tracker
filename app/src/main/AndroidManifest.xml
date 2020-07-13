@@ -12,7 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EachCountryDataActivity"></activity>
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".AboutActivity" />
+        <activity android:name=".EachCountryDataActivity" />
         <activity android:name=".CountryWiseDataActivity" />
         <activity android:name=".EachDistrictDataActivity" />
         <activity android:name=".DistrictWiseDataActivity" />
@@ -20,11 +28,7 @@
         <activity android:name=".StateWiseDataActivity" />
         <activity android:name=".WorldDataActivity" />
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

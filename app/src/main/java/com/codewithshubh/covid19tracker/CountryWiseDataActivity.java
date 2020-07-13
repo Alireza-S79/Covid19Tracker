@@ -20,15 +20,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.codewithshubh.covid19tracker.Adapters.CountryWiseAdapter;
-import com.codewithshubh.covid19tracker.Adapters.StateWiseAdapter;
 import com.codewithshubh.covid19tracker.Models.CountryWiseModel;
-import com.codewithshubh.covid19tracker.Models.StateWiseModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class CountryWiseDataActivity extends AppCompatActivity {
 
@@ -97,6 +97,7 @@ public class CountryWiseDataActivity extends AppCompatActivity {
         countryWiseAdapter.filterList(filteredList, text);
     }
 
+
     private void FetchCountryWiseData() {
         //Show progress dialog
         activity.ShowDialog(this);
@@ -132,6 +133,16 @@ public class CountryWiseDataActivity extends AppCompatActivity {
                                 //adding data to our arraylist
                                 countryWiseModelArrayList.add(countryWiseModel);
                             }
+                            Collections.sort(countryWiseModelArrayList, new Comparator<CountryWiseModel>() {
+                                @Override
+                                public int compare(CountryWiseModel o1, CountryWiseModel o2) {
+                                    if (Integer.parseInt(o1.getConfirmed())>Integer.parseInt(o2.getConfirmed())){
+                                        return -1;
+                                    } else {
+                                        return 1;
+                                    }
+                                }
+                            });
                             Handler makeDelay = new Handler();
                             makeDelay.postDelayed(new Runnable() {
                                 @Override
@@ -166,7 +177,6 @@ public class CountryWiseDataActivity extends AppCompatActivity {
         countryWiseAdapter = new CountryWiseAdapter(CountryWiseDataActivity.this, countryWiseModelArrayList);
         rv_country_wise.setAdapter(countryWiseAdapter);
     }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home)

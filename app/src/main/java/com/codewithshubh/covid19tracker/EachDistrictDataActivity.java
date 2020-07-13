@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.eazegraph.lib.charts.PieChart;
@@ -26,6 +25,7 @@ import static com.codewithshubh.covid19tracker.Constants.DISTRICT_RECOVERED;
 import static com.codewithshubh.covid19tracker.Constants.DISTRICT_RECOVERED_NEW;
 
 public class EachDistrictDataActivity extends AppCompatActivity {
+
     private TextView tv_confirmed, tv_confirmed_new, tv_active, tv_active_new,
             tv_recovered, tv_recovered_new, tv_death, tv_death_new;
 
@@ -40,6 +40,7 @@ public class EachDistrictDataActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_each_district_data);
+
         //Fetching data which is passed from previous activity into this activity
         GetIntent();
 
@@ -55,13 +56,6 @@ public class EachDistrictDataActivity extends AppCompatActivity {
 
         //Load data
         LoadDistrictData();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home)
-            finish();
-        return super.onOptionsItemSelected(item);
     }
 
     private void LoadDistrictData() {
@@ -97,17 +91,11 @@ public class EachDistrictDataActivity extends AppCompatActivity {
             }
         },1000);
     }
-
-    private void Init() {
-        tv_confirmed = findViewById(R.id.activity_each_district_confirmed_textView);
-        tv_confirmed_new = findViewById(R.id.activity_each_district_confirmed_new_textView);
-        tv_active = findViewById(R.id.activity_each_district_active_textView);
-        tv_active_new = findViewById(R.id.activity_each_district_active_new_textView);
-        tv_recovered = findViewById(R.id.activity_each_district_recovered_textView);
-        tv_recovered_new = findViewById(R.id.activity_each_district_recovered_new_textView);
-        tv_death = findViewById(R.id.activity_each_district_death_textView);
-        tv_death_new = findViewById(R.id.activity_each_district_death_new_textView);
-        pieChart = findViewById(R.id.activity_each_district_piechart);
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+            finish();
+        return super.onOptionsItemSelected(item);
     }
 
     private void GetIntent() {
@@ -120,5 +108,17 @@ public class EachDistrictDataActivity extends AppCompatActivity {
         str_death_new = intent.getStringExtra(DISTRICT_DEATH_NEW);
         str_recovered = intent.getStringExtra(DISTRICT_RECOVERED);
         str_recovered_new = intent.getStringExtra(DISTRICT_RECOVERED_NEW);
+    }
+
+    private void Init() {
+        tv_confirmed = findViewById(R.id.activity_each_district_confirmed_textView);
+        tv_confirmed_new = findViewById(R.id.activity_each_district_confirmed_new_textView);
+        tv_active = findViewById(R.id.activity_each_district_active_textView);
+        tv_active_new = findViewById(R.id.activity_each_district_active_new_textView);
+        tv_recovered = findViewById(R.id.activity_each_district_recovered_textView);
+        tv_recovered_new = findViewById(R.id.activity_each_district_recovered_new_textView);
+        tv_death = findViewById(R.id.activity_each_district_death_textView);
+        tv_death_new = findViewById(R.id.activity_each_district_death_new_textView);
+        pieChart = findViewById(R.id.activity_each_district_piechart);
     }
 }

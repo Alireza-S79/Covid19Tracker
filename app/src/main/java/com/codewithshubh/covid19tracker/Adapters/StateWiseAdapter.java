@@ -62,15 +62,12 @@ public class StateWiseAdapter extends RecyclerView.Adapter<StateWiseAdapter.View
         //holder.tv_stateName.setText(stateName);
         if(searchText.length()>0){
             //color your text here
-            int index = stateName.indexOf(searchText);
             sb = new SpannableStringBuilder(stateName);
             Pattern word = Pattern.compile(searchText.toLowerCase());
             Matcher match = word.matcher(stateName.toLowerCase());
             while(match.find()){
                 ForegroundColorSpan fcs = new ForegroundColorSpan(Color.rgb(52, 195, 235)); //specify color here
-                sb.setSpan(fcs, match.start(), match.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                //index = stateName.indexOf(searchText,index+1);
-
+                sb.setSpan(fcs, match.start(), match.end(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
             }
             holder.tv_stateName.setText(sb);
 

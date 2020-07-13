@@ -11,13 +11,13 @@ public class CountryWiseModel {
     private String tests;
     private String flag;
 
-    public CountryWiseModel(String country, String confirmed, String newConfirmed, String active, String deceased,
-                            String newDeceased, String recovered, String tests, String flag) {
+    public CountryWiseModel(String country, String confirmed, String newConfirmed, String active, String deceased, String newDeceased,
+                            String recovered, String tests, String flag) {
         this.country = country;
         this.confirmed = confirmed;
+        this.newConfirmed = newConfirmed;
         this.active = active;
         this.deceased = deceased;
-        this.newConfirmed = newConfirmed;
         this.newDeceased = newDeceased;
         this.recovered = recovered;
         this.tests = tests;
@@ -32,16 +32,16 @@ public class CountryWiseModel {
         return confirmed;
     }
 
+    public String getNewConfirmed() {
+        return newConfirmed;
+    }
+
     public String getActive() {
         return active;
     }
 
     public String getDeceased() {
         return deceased;
-    }
-
-    public String getNewConfirmed() {
-        return newConfirmed;
     }
 
     public String getNewDeceased() {

@@ -270,7 +270,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.menu_about){
-            Toast.makeText(MainActivity.this, "About menu icon clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, "About menu icon clicked", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, AboutActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

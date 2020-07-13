@@ -1,5 +1,6 @@
 package com.codewithshubh.covid19tracker;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,8 +24,10 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.codewithshubh.covid19tracker.Adapters.DistrictWiseAdapter;
 import com.codewithshubh.covid19tracker.Adapters.StateWiseAdapter;
+import com.codewithshubh.covid19tracker.MainActivity;
 import com.codewithshubh.covid19tracker.Models.DistrictWiseModel;
 import com.codewithshubh.covid19tracker.Models.StateWiseModel;
+import com.codewithshubh.covid19tracker.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,11 +38,9 @@ import java.util.ArrayList;
 import static com.codewithshubh.covid19tracker.Constants.STATE_NAME;
 
 public class DistrictWiseDataActivity extends AppCompatActivity {
-
     private RecyclerView rv_district_wise;
     private DistrictWiseAdapter districtWiseAdapter;
     private ArrayList<DistrictWiseModel> districtWiseModelArrayList;
-
     private SwipeRefreshLayout swipeRefreshLayout;
     private EditText et_search;
 
@@ -48,13 +49,14 @@ public class DistrictWiseDataActivity extends AppCompatActivity {
 
     private MainActivity activity = new MainActivity();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_district_wise_data);
 
         GetIntent();
-        
+
         //setting up the title to actionbar
         getSupportActionBar().setTitle("Region/District");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -92,6 +94,8 @@ public class DistrictWiseDataActivity extends AppCompatActivity {
                 Filter(s.toString());
             }
         });
+
+
     }
 
     private void Filter(String s) {
@@ -105,6 +109,7 @@ public class DistrictWiseDataActivity extends AppCompatActivity {
     }
 
     private void FetchDistrictWiseData() {
+
         //Show progress dialog
         activity.ShowDialog(this);
 
@@ -176,11 +181,6 @@ public class DistrictWiseDataActivity extends AppCompatActivity {
 
     }
 
-    private void GetIntent() {
-        Intent intent = getIntent();
-        str_state_name = intent.getStringExtra(STATE_NAME);
-    }
-
     private void Init() {
         rv_district_wise = findViewById(R.id.activity_district_wise_recyclerview);
         swipeRefreshLayout = findViewById(R.id.activity_district_wise_swipe_refresh_layout);
@@ -192,6 +192,11 @@ public class DistrictWiseDataActivity extends AppCompatActivity {
         districtWiseModelArrayList = new ArrayList<>();
         districtWiseAdapter = new DistrictWiseAdapter(DistrictWiseDataActivity.this, districtWiseModelArrayList);
         rv_district_wise.setAdapter(districtWiseAdapter);
+    }
+
+    private void GetIntent() {
+        Intent intent = getIntent();
+        str_state_name = intent.getStringExtra(STATE_NAME);
     }
 
     @Override

@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.codewithshubh.covid19tracker.EachCountryDataActivity;
 import com.codewithshubh.covid19tracker.Models.CountryWiseModel;
 import com.codewithshubh.covid19tracker.R;
@@ -44,10 +43,19 @@ public class CountryWiseAdapter extends RecyclerView.Adapter<CountryWiseAdapter.
     private String searchText="";
     private SpannableStringBuilder sb;
 
+
     public CountryWiseAdapter(Context mContext, ArrayList<CountryWiseModel> countryWiseModelArrayList) {
         this.mContext = mContext;
         this.countryWiseModelArrayList = countryWiseModelArrayList;
     }
+
+    public void filterList(ArrayList<CountryWiseModel> filteredList, String text) {
+        countryWiseModelArrayList = filteredList;
+        this.searchText = text;
+        notifyDataSetChanged();
+    }
+
+
 
     @NonNull
     @Override
@@ -68,8 +76,6 @@ public class CountryWiseAdapter extends RecyclerView.Adapter<CountryWiseAdapter.
         holder.tv_countryTotalCases.setText(NumberFormat.getInstance().format(countryTotalInt));
         //holder.tv_countryName.setText(countryName);
 
-        Glide.with(mContext).load(countryFlag).diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.iv_flagImage);
-
         if(searchText.length()>0){
             //color your text here
             int index = countryName.indexOf(searchText);
@@ -88,6 +94,7 @@ public class CountryWiseAdapter extends RecyclerView.Adapter<CountryWiseAdapter.
             holder.tv_countryName.setText(countryName);
         }
 
+        Glide.with(mContext).load(countryFlag).diskCacheStrategy(DiskCacheStrategy.DATA).into(holder.iv_flagImage);
         holder.lin_country.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,17 +114,12 @@ public class CountryWiseAdapter extends RecyclerView.Adapter<CountryWiseAdapter.
                 mContext.startActivity(perCountryIntent);
             }
         });
+
     }
 
     @Override
     public int getItemCount() {
         return countryWiseModelArrayList==null || countryWiseModelArrayList.isEmpty() ? 0 : countryWiseModelArrayList.size();
-    }
-
-    public void filterList(ArrayList<CountryWiseModel> filteredList, String text) {
-        countryWiseModelArrayList = filteredList;
-        this.searchText = text;
-        notifyDataSetChanged();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
