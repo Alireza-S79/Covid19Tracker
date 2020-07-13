@@ -19,7 +19,6 @@ public class AboutActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("About");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
     }
 
     @Override

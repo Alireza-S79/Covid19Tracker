@@ -18,6 +18,7 @@ public class SplashActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
