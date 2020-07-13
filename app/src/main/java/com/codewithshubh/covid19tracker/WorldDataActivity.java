@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -76,7 +77,8 @@ public class WorldDataActivity extends AppCompatActivity {
         lin_countrywise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(WorldDataActivity.this, "Country wise data", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(WorldDataActivity.this, "Country wise data", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(WorldDataActivity.this, CountryWiseDataActivity.class));
             }
         });
 

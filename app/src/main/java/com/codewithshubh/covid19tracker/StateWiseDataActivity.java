@@ -1,5 +1,6 @@
 package com.codewithshubh.covid19tracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.android.volley.Request;
@@ -90,7 +92,7 @@ public class StateWiseDataActivity extends AppCompatActivity {
                 filteredList.add(item);
             }
         }
-        stateWiseAdapter.filterList(filteredList);
+        stateWiseAdapter.filterList(filteredList, text);
     }
 
     private void FetchStateWiseData() {
@@ -171,5 +173,12 @@ public class StateWiseDataActivity extends AppCompatActivity {
         stateWiseModelArrayList = new ArrayList<>();
         stateWiseAdapter = new StateWiseAdapter(StateWiseDataActivity.this, stateWiseModelArrayList);
         rv_state_wise.setAdapter(stateWiseAdapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+            finish();
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -65,7 +65,10 @@ public class EachStateDataActivity extends AppCompatActivity {
         lin_district.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(EachStateDataActivity.this, "Select District of "+str_stateName, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(EachStateDataActivity.this, "Select District of "+str_stateName, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(EachStateDataActivity.this, DistrictWiseDataActivity.class);
+                intent.putExtra(STATE_NAME, str_stateName);
+                startActivity(intent);
             }
         });
     }
@@ -83,7 +86,7 @@ public class EachStateDataActivity extends AppCompatActivity {
                 tv_active.setText(NumberFormat.getInstance().format(Integer.parseInt(str_active)));
                 int int_active_new = Integer.parseInt(str_confirmed_new)
                         - (Integer.parseInt(str_recovered_new) + Integer.parseInt(str_death_new));
-                tv_active_new.setText("+"+NumberFormat.getInstance().format(int_active_new));
+                tv_active_new.setText("+"+NumberFormat.getInstance().format(int_active_new<0 ? 0 : int_active_new));
 
                 tv_death.setText(NumberFormat.getInstance().format(Integer.parseInt(str_death)));
                 tv_death_new.setText("+"+NumberFormat.getInstance().format(Integer.parseInt(str_death_new)));

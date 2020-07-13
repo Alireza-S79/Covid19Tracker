@@ -12,7 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EachStateDataActivity"></activity>
+        <activity android:name=".EachCountryDataActivity"></activity>
+        <activity android:name=".CountryWiseDataActivity" />
+        <activity android:name=".EachDistrictDataActivity" />
+        <activity android:name=".DistrictWiseDataActivity" />
+        <activity android:name=".EachStateDataActivity" />
         <activity android:name=".StateWiseDataActivity" />
         <activity android:name=".WorldDataActivity" />
         <activity android:name=".MainActivity">

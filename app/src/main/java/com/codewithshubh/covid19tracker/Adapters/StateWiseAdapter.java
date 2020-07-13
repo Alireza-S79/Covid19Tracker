@@ -2,6 +2,11 @@ package com.codewithshubh.covid19tracker.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +20,10 @@ import com.codewithshubh.covid19tracker.EachStateDataActivity;
 import com.codewithshubh.covid19tracker.Models.StateWiseModel;
 import com.codewithshubh.covid19tracker.R;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.codewithshubh.covid19tracker.Constants.STATE_ACTIVE;
 import static com.codewithshubh.covid19tracker.Constants.STATE_CONFIRMED;
@@ -30,11 +38,12 @@ import static com.codewithshubh.covid19tracker.Constants.STATE_RECOVERED_NEW;
 public class StateWiseAdapter extends RecyclerView.Adapter<StateWiseAdapter.ViewHolder> {
 
     private Context mContext;
-    private ArrayList<StateWiseModel> arrayList;
-
+    private ArrayList<StateWiseModel> stateWiseModelArrayList;
+    private String searchText = "";
+    private SpannableStringBuilder sb;
     public StateWiseAdapter(Context mContext, ArrayList<StateWiseModel> arrayList) {
         this.mContext = mContext;
-        this.arrayList = arrayList;
+        this.stateWiseModelArrayList = arrayList;
     }
 
     @NonNull
@@ -46,17 +55,33 @@ public class StateWiseAdapter extends RecyclerView.Adapter<StateWiseAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        StateWiseModel currentItem = arrayList.get(position);
+        StateWiseModel currentItem = stateWiseModelArrayList.get(position);
         String stateName = currentItem.getState();
-
         String stateTotal = currentItem.getConfirmed();
-        holder.stateTotalCases.setText(stateTotal);
-        holder.stateName.setText(stateName);
+        holder.tv_stateTotalCases.setText(NumberFormat.getInstance().format(Integer.parseInt(stateTotal)));
+        //holder.tv_stateName.setText(stateName);
+        if(searchText.length()>0){
+            //color your text here
+            int index = stateName.indexOf(searchText);
+            sb = new SpannableStringBuilder(stateName);
+            Pattern word = Pattern.compile(searchText.toLowerCase());
+            Matcher match = word.matcher(stateName.toLowerCase());
+            while(match.find()){
+                ForegroundColorSpan fcs = new ForegroundColorSpan(Color.rgb(52, 195, 235)); //specify color here
+                sb.setSpan(fcs, match.start(), match.end(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                //index = stateName.indexOf(searchText,index+1);
+
+            }
+            holder.tv_stateName.setText(sb);
+
+        }else{
+            holder.tv_stateName.setText(stateName);
+        }
 
          holder.lin_state_wise.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
-                 StateWiseModel clickedItem = arrayList.get(position);
+                 StateWiseModel clickedItem = stateWiseModelArrayList.get(position);
                  Intent perStateIntent = new Intent(mContext, EachStateDataActivity.class);
                  perStateIntent.putExtra(STATE_NAME, clickedItem.getState());
                  perStateIntent.putExtra(STATE_CONFIRMED, clickedItem.getConfirmed());
@@ -73,24 +98,25 @@ public class StateWiseAdapter extends RecyclerView.Adapter<StateWiseAdapter.View
          });
     }
 
-    public void filterList(ArrayList<StateWiseModel> filteredList) {
-        arrayList = filteredList;
+    public void filterList(ArrayList<StateWiseModel> filteredList, String text) {
+        stateWiseModelArrayList = filteredList;
+        this.searchText = text;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return arrayList==null ? 0 : arrayList.size();
+        return stateWiseModelArrayList==null ? 0 : stateWiseModelArrayList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView stateName, stateTotalCases;
+        TextView tv_stateName, tv_stateTotalCases;
         LinearLayout lin_state_wise;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            stateName = itemView.findViewById(R.id.statewise_layout_name_textview);
-            stateTotalCases = itemView.findViewById(R.id.statewise_layout_confirmed_textview);
+            tv_stateName = itemView.findViewById(R.id.statewise_layout_name_textview);
+            tv_stateTotalCases = itemView.findViewById(R.id.statewise_layout_confirmed_textview);
             lin_state_wise = itemView.findViewById(R.id.layout_state_wise_lin);
         }
     }
