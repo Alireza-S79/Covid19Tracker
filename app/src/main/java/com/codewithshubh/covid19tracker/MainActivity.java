@@ -3,14 +3,16 @@ package com.codewithshubh.covid19tracker;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -29,6 +31,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
@@ -45,6 +52,10 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String version;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private String appUrl;
     private TextView tv_confirmed, tv_confirmed_new, tv_active, tv_active_new, tv_recovered, tv_recovered_new, tv_death,
             tv_death_new, tv_tests, tv_tests_new, tv_date, tv_time;
 
@@ -65,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        CheckForUpdate();
 
         //setting up the titlebar text
         getSupportActionBar().setTitle("Covid-19 Tracker (India)");
@@ -101,6 +114,68 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, WorldDataActivity.class));
             }
         });
+    }
+
+    private void CheckForUpdate() {
+        try{
+            version = this.getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            databaseReference = firebaseDatabase.getReference("Version").child("versionNumber");
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String versionName = (String) dataSnapshot.getValue();
+
+                    if(!versionName.equals(version)){
+                        //Toast.makeText(MainActivity.this, "Successful", Toast.LENGTH_SHORT).show();
+
+                        androidx.appcompat.app.AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("New Version Available!")
+                                .setMessage("Please update our app to the latest version for continuous use.")
+                                .setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Version").child("appUrl");
+                                        myRef.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                appUrl = dataSnapshot.getValue().toString();
+                                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl)));
+                                                finish();
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+                                })
+                                .setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        finish();
+                                    }
+                                })
+                                .create();
+
+                        alertDialog.setCancelable(false);
+                        alertDialog.setCanceledOnTouchOutside(false);
+
+                        alertDialog.show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void FetchData() {

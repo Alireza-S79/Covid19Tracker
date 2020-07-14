@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +73,9 @@ public class CountryWiseAdapter extends RecyclerView.Adapter<CountryWiseAdapter.
         String countryFlag = currentItem.getFlag();
         String countryRank = String.valueOf(position+1);
         int countryTotalInt = Integer.parseInt(countryTotal);
+        Log.d("country rank", countryRank);
         holder.tv_rankTextView.setText(countryRank+".");
+        Log.d("country total cases int", String.valueOf(countryTotalInt));
         holder.tv_countryTotalCases.setText(NumberFormat.getInstance().format(countryTotalInt));
         //holder.tv_countryName.setText(countryName);
 
@@ -123,7 +126,7 @@ public class CountryWiseAdapter extends RecyclerView.Adapter<CountryWiseAdapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_countryName, tv_countryTotalCases, tv_rankTextView;
+        private TextView tv_countryName, tv_countryTotalCases, tv_rankTextView;
         ImageView iv_flagImage;
         LinearLayout lin_country;
         public MyViewHolder(@NonNull View itemView) {
