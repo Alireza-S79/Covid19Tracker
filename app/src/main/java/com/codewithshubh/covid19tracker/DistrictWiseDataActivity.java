@@ -147,8 +147,8 @@ public class DistrictWiseDataActivity extends AppCompatActivity {
 
                                         //Creating an object of our statewise model class and passing the values in the constructor
                                         DistrictWiseModel districtWiseModel = new DistrictWiseModel(str_district, str_confirmed,
-                                                str_confirmed_new, str_active, str_death, str_death_new, str_recovered,
-                                                str_recovered_new);
+                                                str_active, str_recovered, str_death, str_confirmed_new, str_recovered_new,
+                                                str_death_new);
                                         //adding data to our arraylist
                                         districtWiseModelArrayList.add(districtWiseModel);
                                     }
